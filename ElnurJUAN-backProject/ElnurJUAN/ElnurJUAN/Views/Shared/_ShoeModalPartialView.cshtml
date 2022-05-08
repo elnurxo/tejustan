@@ -1,0 +1,75 @@
+﻿@model Shoe
+<div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- product details inner end -->
+            <div class="product-details-inner">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="product-large-slider mb-20">
+                            <div class="pro-large-img">
+                                <img id="modalimage" src="~/uploads/products/@Model.ShoeImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image" alt="product thumb" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="product-details-des">
+                            <h3 class="pro-det-title">@Model.Name</h3>
+                            <div class="brand-shoe availability mb-10">
+                                <h5 class="cat-title">Category:</h5>
+                                <span class="text-info categorymodal" style="cursor:pointer">@Model.Category.Name</span>
+                            </div>
+                            <div class="pro-review">
+                                <span><a href="#">@Model.ShoeComments.Count Review(s)</a></span>
+                            </div>
+                            <div class="price-box">
+                                @if (Model.DiscountPercent > 0)
+                                {
+                                    <span class="price-old"  style="font-size:21px"><del>$@Model.SalePrice</del></span>
+                                    <span class="price-regular" style="font-size:21px">$@((Model.SalePrice * (1- Model.DiscountPercent/100)).ToString("0.00"))</span>
+                                    <br />
+                                    <h6 class="text-danger" style="font-size:13px;padding-top:8px">@Model.DiscountPercent % Sale</h6>
+                                }
+                                else
+                                {
+                                    <span class="price-regular">$@Model.SalePrice</span>
+                                }
+                            </div>
+                            <span class="discount-percent-modal text-danger"></span>
+                            <p class="shoe-desc-modal" style="padding-top:5px">@Model.Desc</p>
+                            <div class="quantity-cart-box d-flex align-items-center mb-20">
+                                <a  asp-controller="shoe" asp-action="addbasket" asp-route-id="@Model.Id" class="btn btn-default add-to-cart-shoe @(Model.IsAvailable==false?"disabled":"")">Add To Cart</a>
+                            </div>
+                            <div class="availability mb-10">
+                                <h5 class="cat-title">Availability:</h5>
+                                <span class="shoe-isavailable" style="color:@(Model.IsAvailable==true?"green":"red")">@(Model.IsAvailable==true?"In Stock":"Out of Stock")</span>
+                            </div>
+                            <div class="brand-shoe availability mb-10">
+                                <h5 class="cat-title">Brand:</h5>
+                                <span class="brandmodal text-info" style="cursor:pointer">@Model.Brand.Name</span>
+                            </div>
+                            <div class="brand-shoe availability mb-10">
+                                <h5 class="cat-title">Colors:</h5>
+                                @foreach (var color in Model.ShoeColors)
+                                {
+                                    <span style="cursor:pointer;color:@(color.Color.Name!="White"?@color.Color.HexValue:"")">
+                                        @color.Color.Name
+                                    </span>
+                                }
+
+                            </div>
+                            <div class="brand-shoe availability mb-10">
+                                <h5 class="cat-title">Sexuality:</h5>
+                                <span class="text-info gendermodal" style="cursor:pointer">@Model.Gender.Name</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- product details inner end -->
+        </div>
+    </div>
+</div>

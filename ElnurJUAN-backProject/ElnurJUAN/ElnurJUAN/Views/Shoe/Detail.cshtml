@@ -1,0 +1,207 @@
+﻿@model ShoeDetailViewModel
+
+@{ 
+    ViewData["Title"] = "Detail";
+}
+
+    <main>
+        <!-- breadcrumb area start -->
+        <div class="breadcrumb-area bg-img" data-bg="assets/img/banner/breadcrumb-banner.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrap text-center">
+                            <nav aria-label="breadcrumb">
+                                <h1 class="breadcrumb-title">shop</h1>
+                                <ul class="breadcrumb">
+                                    <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
+                                    <li class="breadcrumb-item"><a asp-controller="shoe" asp-action="index">Shop</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Product Details</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- breadcrumb area end -->
+        <!-- product details wrapper start -->
+        <div class="product-details-wrapper section-padding">
+            <div class="container custom-container">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- product details inner end -->
+                        <div class="product-details-inner">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="product-large-slider mb-20">
+                                        @foreach (var item in Model.Shoe.ShoeImages)
+                                        {
+                                            <div class="pro-large-img img-zoom">
+                                                <img src="~/uploads/products/@item.Image" alt="invalid" />
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="pro-nav slick-row-5">
+                                        @foreach (var item in Model.Shoe.ShoeImages)
+                                        {
+                                            <div class="pro-nav-thumb"><img src="~/uploads/products/@item.Image" alt="invalid" /></div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="product-details-des">
+                                        <h3 class="pro-det-title">@Model.Shoe.Name</h3>
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <span class="good"><i class="@(Model.Shoe.Rate>=i?"fas fa-star":"far fa-star")"></i></span>
+                                        }
+                                        <div class="brand-shoe availability mb-10">
+                                            <h5 class="cat-title">Category:</h5>
+                                            <span class="text-info categorymodal" style="cursor:pointer">@Model.Shoe.Category.Name</span>
+                                        </div>
+                                        <div class="brand-shoe availability mb-10">
+                                            <h5 class="cat-title">Product Code:</h5>
+                                            <span class="text-info categorymodal" style="cursor:pointer">@(Model.Shoe.CodePref+Model.Shoe.CodeNum)</span>
+                                        </div>
+                                        <div class="pro-review">
+                                            <span><a href="#">@Model.Shoe.ShoeComments.Count Review(s)</a></span>
+                                        </div>
+                                        <div class="price-box">
+                                            @if (Model.Shoe.DiscountPercent > 0)
+                                            {
+                                                <span class="price-old"><del>$@Model.Shoe.SalePrice</del></span>
+                                                <span class="price-regular">$@((Model.Shoe.SalePrice * (1- Model.Shoe.DiscountPercent/100)).ToString("0.00"))</span>
+                                                <br />
+                                                <h6 class="text-danger" style="font-size:13px;padding-top:8px">@Model.Shoe.DiscountPercent % Sale</h6>
+                                            }
+                                            else
+                                            {
+                                                <span class="price-regular">$@Model.Shoe.SalePrice</span>
+                                            }
+                                        </div>
+                                        <p>
+                                            @Model.Shoe.Desc
+                                        </p>
+                                        <div class="quantity-cart-box d-flex align-items-center mb-20">
+                                            <a asp-controller="shoe" asp-action="addbasket" asp-route-id="@Model.Shoe.Id" class="btn btn-default add-to-cart-shoe @(Model.Shoe.IsAvailable==false?"disabled":"")">Add To Cart</a>
+                                        </div>
+                                        <div class="availability mb-20">
+                                            <h5 class="cat-title">Availability:</h5>
+                                            <span class="shoe-isavailable" style="color:@(Model.Shoe.IsAvailable==true?"green":"red")">@(Model.Shoe.IsAvailable==true?"In Stock":"Out of Stock")</span>
+                                        </div>
+                                        <div class="brand-shoe availability mb-10">
+                                            <h5 class="cat-title">Brand:</h5>
+                                            <span class="brandmodal text-info" style="cursor:pointer">@Model.Shoe.Brand.Name</span>
+                                        </div>
+                                        <div class="brand-shoe availability mb-10">
+                                            <h5 class="cat-title">Colors:</h5>
+                                            @foreach (var color in Model.Shoe.ShoeColors)
+                                            {
+                                                <span style="cursor:pointer;color:@(color.Color.Name!="White"?@color.Color.HexValue:"")">
+                                                    @color.Color.Name
+                                                </span>
+                                            }
+
+                                        </div>
+                                        <div class="brand-shoe availability mb-10">
+                                            <h5 class="cat-title">Sexuality:</h5>
+                                            <span class="text-info gendermodal" style="cursor:pointer">@Model.Shoe.Gender.Name</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- product details inner end -->
+                        <!-- product details reviews start -->
+                        <h5>@Model.Shoe.ShoeComments.Count  review for <span>@Model.Shoe.Name</span></h5>
+                        @foreach (var comment in Model.Shoe.ShoeComments)
+                        {
+                            <div class="total-reviews">
+                                <div class="review-box">
+                                    <div class="ratings">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <span class="good"><i class="@(comment.Rate>=i?"fas fa-star":"far fa-star")"></i></span>
+                                        }
+                                    </div>
+                                    <div class="post-author">
+                                        <p><span>@comment.AppUser.FullName -</span> @comment.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                                    </div>
+                                    <p>@comment.Text</p>
+                                </div>
+                            </div>
+                        }
+                        @Html.Partial("_ShoeCommentPartialView", Model.Comment)
+                        <!-- product details reviews end -->
+                        <!-- featured product area start -->
+                        <section class="Related-product">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="section-title text-center">
+                                            <h2 class="title">Related Product</h2>
+                                            <p class="sub-title">Same Category Shoes you might want to see :)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="product-carousel-4 mbn-50 slick-row-15 slick-arrow-style">
+                                            <!-- product single item start -->
+                                            @foreach (var item in Model.RelatedShoes)
+                                            {
+                                                <div class="product-item mb-50">
+                                                    <div class="product-thumb">
+                                                        <a asp-controller="shoe" asp-action="detail" asp-route-id="@item.Id">
+                                                            <img src="~/uploads/products/@item.ShoeImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image" alt="" />
+                                                        </a>
+                                                    </div>
+                                                    <div class="product-content">
+                                                        <h5 class="product-name">
+                                                            <a asp-controller="shoe" asp-action="detail" asp-route-id="@item.Id">@item.Name</a>
+                                                        </h5>
+
+                                                        <div class="price-box">
+                                                            @if (Model.Shoe.DiscountPercent > 0)
+                                                            {
+                                                                <span class="price-old"><del>$@item.SalePrice</del></span>
+                                                                <span class="price-regular">$@((item.SalePrice * (1- item.DiscountPercent/100)).ToString("0.00"))</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="price-regular">$@item.SalePrice</span>
+                                                            }
+                                                        </div>
+                                                        <div class="product-action-link">
+                                                            <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
+                                                            <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
+                                                            <a asp-controller="shoe" asp-action="getshoe" asp-route-id="@item.Id" class="open-shoe-modal">
+                                                                <span data-toggle="tooltip"
+                                                                      title="Quick View"><i class="ion-ios-eye-outline"></i></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            <!-- product single item start -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- featured product area end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- product details wrapper end -->
+    </main>
+    <!-- main wrapper end -->
+    <!-- Quick view modal start -->
+    <div class="modal" id="quick_view">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/51866e0675.js" crossorigin="anonymous"></script>
+    <!-- Quick view modal end -->

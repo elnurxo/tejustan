@@ -1,0 +1,83 @@
+﻿@model BasketViewModel
+@{
+    var counter = 0;
+}
+<div class="minicart-item-wrapper">
+    @if (TempData["Success"] != null)
+    {
+        <input type="hidden" id="success-toaster" value="@TempData["Success"]" />
+    }
+    <ul>
+        @foreach (var item in Model.BasketItems)
+        {
+            counter += item.Count;
+            <li class="minicart-item">
+                <div class="minicart-thumb">
+                    <a href="product-details.html">
+                        <img src="~/uploads/products/@item.Shoe.ShoeImages.FirstOrDefault(x=>x.PosterStatus == true)?.Image" alt="product">
+                    </a>
+                </div>
+                <div class="minicart-content">
+                    <h3 class="product-name">
+                        <a href="product-details.html">@item.Shoe.Name</a>
+                    </h3>
+                    <p>
+                        <span class="cart-quantity">@item.Count <strong>&times;</strong></span>
+                        <span class="cart-price">$ @((item.Shoe.DiscountPercent>0?(item.Shoe.SalePrice*(1-item.Shoe.DiscountPercent/100)):item.Shoe.SalePrice).ToString("0.00")) </span>
+                    </p>
+                </div>
+                <div style="display:flex">
+                    <span>
+                        <a asp-controller="shoe" asp-action="addbasket" asp-route-id="@item.Shoe.Id" class="add-to-cart-shoe minicart-remove"><i style="margin-right:50px !important" class="fas fa-plus"></i></a>
+                    </span>
+                    <span>
+                        <a asp-controller="shoe" asp-action="removebasket" asp-route-id="@item.Shoe.Id" class="remove-from-basket minicart-remove"><i style="color:red" class="fas fa-times"></i></a>
+                    </span>
+                </div>
+            </li>
+
+        }
+        <li>
+            <input type="hidden" value="@counter" class="basket-counter" />
+        </li>
+    </ul>
+</div>
+
+<div class="minicart-pricing-box">
+    <ul>
+
+        <li class="total">
+            <span>total</span>
+            <span><strong>$@Model.TotalPrice.ToString("0.00")</strong></span>
+        </li>
+    </ul>
+</div>
+
+<div class="minicart-button">
+    <a asp-controller="order" asp-action="cart"><i class="fa fa-shopping-cart"></i> view cart</a>
+    <a asp-controller="order" asp-action="checkout"><i class="fa fa-share"></i> checkout</a>
+</div>
+<script>
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        $(document).ready(function () {
+            if ($("#success-toaster").length) {
+                toastr["success"]($("#success-toaster").val());
+            }
+        });
+</script>

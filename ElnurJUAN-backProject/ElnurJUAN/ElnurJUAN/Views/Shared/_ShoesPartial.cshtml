@@ -1,0 +1,38 @@
+﻿@model List<Shoe>
+
+@foreach (var product in Model)
+{
+    <div class="product-item mb-50">
+        <div class="product-thumb">
+            <a asp-controller="shoe" asp-action="detail" asp-route-id="@product.Id">
+                <img height="290" src ="~/uploads/products/@product.ShoeImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image" alt="">
+            </a>
+        </div>
+        <div class="product-content">
+            <h5 class="product-name">
+                <a asp-controller="shoe" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
+            </h5>
+            <div class="price-box">
+                @if (product.DiscountPercent > 0)
+                {
+                    <span class="price-old"><del>$@product.SalePrice</del></span>
+                    <span class="price-regular">$@((product.SalePrice * (1- product.DiscountPercent/100)).ToString("0.00"))</span>
+                }
+                else
+                {
+                    <span class="price-regular">$@product.SalePrice</span>
+                }
+
+            </div>
+            <div class="product-action-link">
+                <a data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
+                    <a asp-controller="shoe" asp-action="addbasket" asp-route-id="@product.Id" class="add-to-cart-shoe" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>               
+                     <a asp-controller="shoe" asp-action="getshoe" asp-route-id="@product.Id" class="open-shoe-modal">
+                    <span data-toggle="tooltip"
+                          title="Quick View"><i class="ion-ios-eye-outline"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+}

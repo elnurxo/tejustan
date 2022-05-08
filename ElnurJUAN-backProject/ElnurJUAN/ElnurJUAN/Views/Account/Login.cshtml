@@ -1,0 +1,79 @@
+﻿@model MemberLoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+<!-- main wrapper start -->
+<main>
+    <!-- breadcrumb area start -->
+    <div class="breadcrumb-area bg-img" data-bg="assets/img/banner/breadcrumb-banner.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-wrap text-center">
+                        <nav aria-label="breadcrumb">
+                            <h1 class="breadcrumb-title">Login</h1>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Login</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcrumb area end -->
+    <!-- login register wrapper start -->
+    <div class="login-register-wrapper section-padding">
+        <div class="container">
+            <div class="member-area-from-wrap">
+                <div class="row">
+                    <!-- Register Content Start -->
+                    <div class="col-lg-8 mx-auto">
+                        <div class="login-reg-form-wrap signin-form">
+                            <h2>Sing In</h2>
+                            <form asp-action="login" method="post">
+                                <div class="single-input-item">
+                                    <label asp-for="UserName">User Name</label>
+                                    <input type="text" placeholder="User Name" asp-for="UserName" required />
+                                    <span class="text-danger" asp-validation-for="UserName"></span>
+                                </div>
+                                <div class="single-input-item">
+                                    <label asp-for="Password">Password</label>
+                                    <input type="password" placeholder="Enter your Password" asp-for="Password" required />
+                                    <span class="text-danger" asp-validation-for="Password"></span>
+                                </div>
+                                <div class="single-input-item">
+                                    <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
+                                        <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
+                                            <div class="remember-meta">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" asp-for="IsPersistent">
+                                                    <label class="custom-control-label" asp-for="IsPersistent">Remember Me</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <a href="#" class="forget-pwd">Forget Password?</a>
+                                        <a asp-controller="account" asp-action="register" class="forget-pwd">Craete an Account</a>
+                                    </div>
+                                </div>
+                                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                                <div class="single-input-item">
+                                    <button class="btn" type="submit">Login</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- main wrapper end -->
+
+
